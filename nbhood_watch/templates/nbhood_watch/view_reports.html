@@ -1,0 +1,87 @@
+{% extends 'nbhood_watch/base.html' %}
+{% block title %}View Reports{% endblock %}
+
+{% load static %}
+{% block image %}
+<div class="main-image">
+    <img src="{% static 'nbhood_watch/images/lawnfall_enhanced.jpg' %}" alt="Main Image">
+    <div class="overlay" style="position: absolute; top: 30%; left: 50%; transform: translate(-50%, -50%); text-align: center; text-shadow: 1px 1px 0 #fff;">
+        <h3 class="text-center header-title" style="font-size: 48px; color: orangered; background-color: rgba(200, 200, 200, 0.45); padding: 10px; border-radius: 15px;">Report Submissions</h3>
+    </div>
+</div>
+{% endblock image %}
+
+{% block content %}
+<div class="overlay">
+  <div class="row mt-4">
+    <div class="col-sm-12 text-center">
+      <div class="d-flex justify-content-center">
+        <a href="{% url 'nbhood_watch:admin_info' %}" class="btn small-orange-btn wide-btn" style="margin-bottom: 20px;">Back to User Home</a>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <div class="table-responsive">
+        <table class="table table-dark table-striped">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th style="width: 20%;">Report Date</th>
+              <th style="width: 30%;">Report Title</th>
+              <th style="width: 20%;">Files</th>
+              <th style="width: 15%;">Status</th>
+              <th>Details</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for submission in submissions %}
+            <tr>
+              <td>
+                {% if submission.submission_user.first_name or submission.submission_user.last_name %}
+                    {{ submission.submission_user.first_name|default:"N/A" }}
+                    {{ submission.submission_user.last_name|default:"" }}
+                {% else %}
+                    N/A
+                {% endif %}
+              </td>
+              <td>{{ submission.submission_user.email|default:"N/A" }}</td>
+              <td>{{ submission.submission_date|date:"m-d-Y H:i" }}</td>
+              <td style="word-wrap: break-word;">{{ submission.submission_title|default:"N/A" }}</td>
+              <td style="word-wrap: break-word; max-width: 200px;">
+                {% if submission.files.all %}
+                <ul>
+                  {% for file in submission.files.all %}
+                    <li><a href="{{ file.file.url }}" title="{{ file.file.name }}">{{ file.file.name }}</a></li>
+                  {% endfor %}
+                </ul>
+                {% else %}
+                N/A
+                {% endif %}
+              </td>
+              <td style="word-wrap: break-word;">
+                <form action="{% url 'nbhood_watch:update_submission_status' %}" method="post">
+                  {% csrf_token %}
+                  <input type="hidden" name="submission_id" value="{{ submission.id }}">
+                  <select name="status" class="form-select" onchange="this.form.submit()">
+                    <option value="New" {% if submission.submission_status == 'New' %}selected{% endif %}>New</option>
+                    <option value="In Progress" {% if submission.submission_status == 'In Progress' %}selected{% endif %}>In Progress</option>
+                    <option value="Reviewed" {% if submission.submission_status == 'Reviewed' %}selected{% endif %}>Reviewed</option>
+                  </select>
+                </form>
+              </td>
+              <td><a href="{% url 'nbhood_watch:submission_info' submission_id=submission.id %}" class="btn small-orange-btn">View Details</a></td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="6" class="text-center text-white">No reports found!</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

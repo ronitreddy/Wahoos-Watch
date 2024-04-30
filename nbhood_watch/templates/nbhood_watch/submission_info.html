@@ -1,0 +1,86 @@
+{% extends 'nbhood_watch/base.html' %}
+{% load static %}
+
+{% block title %}Submission Details{% endblock title%}
+
+{% block image %}
+<div class="main-image">
+    <img src="{% static 'nbhood_watch/images/lawnfall_enhanced.jpg' %}" alt="Main Image">
+    <div class="overlay" style="position: absolute; top: 30%; left: 50%; transform: translate(-50%, -50%); text-align: center; text-shadow: 1px 1px 0 #fff;">
+        <h3 class="text-center header-title" style="font-size: 48px; color: orangered; background-color: rgba(200, 200, 200, 0.45); padding: 10px; border-radius: 15px;">Submission Details</h3>
+    </div>
+</div>
+{% endblock image %}
+
+{% block content %}
+<div class="d-flex justify-content-center gap-2">
+      <a href="{% url 'nbhood_watch:view_reports' %}" class="btn small-orange-btn wide-btn">Back to View Reports</a>
+</div>
+<div class="overlay" style="color: white">
+    <br>
+    <h4 class="text-center header-title" style="color: white;">Submission {{ submission.id }} by {{ submission.submission_user.email|default:"N/A" }}</h4>
+    <p><strong>Submission Date:</strong> {{ submission.submission_date }}</p>
+    <p><strong>Title:</strong> {{ submission.submission_title }}</p>
+    <p><strong>Description:</strong> {{ submission.submission_description }}</p>
+    <p><strong>Category:</strong> {{ submission.submission_category}}</p>
+    <p><strong>Visibility Status:</strong> {{ submission.submission_visibility}}</p>
+    {% if submission.files.all %}
+        <p><strong>File:</strong></p>
+        <ul>
+            {% for file in submission.files.all %}
+                <li><a href="{{ file.file.url }}" title="{{ file.file.name }}">{{ file.file.name }}</a></li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p><strong>File:</strong> N/A</p>
+    {% endif %}
+    <td style="word-wrap: break-word;">
+        <form action="{% url 'nbhood_watch:update_submission_status_on_view_details' %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="submission_id" value="{{ submission.id }}">
+            <p><strong>Review Status:</strong> {{ submission.get_submission_status_display }}</p>
+            <select name="status" class="form-select mb-2">
+                <option value="New" {% if submission.submission_status == 'New' %}selected{% endif %}>New</option>
+                <option value="In Progress" {% if submission.submission_status == 'In Progress' %}selected{% endif %}>In Progress</option>
+                <option value="Reviewed" {% if submission.submission_status == 'Reviewed' %}selected{% endif %}>Reviewed</option>
+            </select>
+            <p><strong>Verification Status:</strong> {{ submission.submission_verification }}</p>
+            <select name="verification" class="form-select mb-2">
+                <option value="Verified" {% if submission.submission_verification == 'Verified' %}selected{% endif %}>Verified</option>
+                <option value="Unverified" {% if submission.submission_verification == 'Unverified' %}selected{% endif %}>Unverified</option>
+                <option value="False Information" {% if submission.submission_verification == 'False Information' %}selected{% endif %}>False Information</option>
+            </select>
+            <p><strong>Admin Notes:</strong>
+            <textarea name="admin_notes" class="form-control mb-2" placeholder="Enter Admin Notes">{{ submission.submission_admin_notes }}</textarea>
+            {% if submission.latitude and submission.longitude %}
+                <p><strong>Submission Location:</strong></p> 
+                <div id="map" style="width: 100%; height: 400px;"></div>
+            {% else %}
+                <p><strong>Submission Location:</strong> N/A</p>
+            {% endif %}
+            <div class="d-flex justify-content-center submit-button-container">
+                <input class="btn small-orange-btn" type="submit" value="Update Report">
+            </div>
+        </form>
+
+    </td>
+    <script>
+function initMap() {
+    var submissionLocation = {
+        lat: {{ submission.latitude }},
+        lng: {{ submission.longitude }}
+    };
+    var map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 15,
+        center: submissionLocation
+    });
+    var marker = new google.maps.Marker({
+        position: submissionLocation,
+        map: map
+    });
+}
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key={{ google_maps_api_key }}&callback=initMap" async defer></script>
+
+</div>
+{% endblock content %}

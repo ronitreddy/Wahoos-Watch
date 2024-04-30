@@ -1,0 +1,34 @@
+.header-white {
+    color: white;
+    font-size: 36px;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+.resource-list {
+    max-width: 700px;
+    margin: 50px auto;
+    padding: 30px;
+    background-color: #232D4B;
+    border-radius: 10px;
+    color: white;
+}
+
+.resource-list ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.resource-list ul li {
+    font-size: 20px;
+    margin-bottom: 10px;
+    padding-left: 30px;
+    position: relative;
+}
+
+.resource-list ul li:before {
+    content: '•';
+    color: #F84C1E;
+    font-size: 30px;
+    position: relative;
+    left: 0;
+}

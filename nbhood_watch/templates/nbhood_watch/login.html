@@ -1,0 +1,99 @@
+{% extends 'nbhood_watch/base.html' %}
+{% load static %}
+{% block title %}Home{% endblock title%}
+
+<head>
+
+</head>
+
+{% block image %}
+<div class="main-image">
+    <img src="{% static 'nbhood_watch/images/lawnfall_enhanced.jpg' %}" alt="Main Image">
+
+    <div class="overlay" style="position: absolute; top: 15%; left: 50%; transform: translate(-50%, -50%); text-align: center; text-shadow: 1px 1px 0 #fff; background-color: rgba(200, 200, 200, 0.45); padding: 10px; border-radius: 15px;">
+    <h3 class="text-center header-title" style="font-size: 48px; color: orangered">Wahoos Watching Out</h3>
+</div>
+<div class="overlay" style="position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%); text-align: center; text-shadow: 1px 1px 0 #fff; background-color: rgba(200, 200, 200, 0.45); padding: 10px; border-radius: 15px;">
+    <h3 class="text-center header-title" style="font-size: 36px;">Help Keep Our Community Safe!</h3>
+</div>
+</div>
+{% endblock image %}
+
+{% block content %}
+<div class="overlay">
+        <br>
+        <div class="social-container">
+            <a href="{% url 'social:begin' 'google-oauth2' %}?prompt=select_account" class="btn">Login With Google</a>
+            <a href="{% url 'nbhood_watch:anonymous_info' %}" class="btn">Login Anonymously</a>
+        </div>
+        <div class="emergency-button-container">
+            <a href="{% url 'nbhood_watch:emergency_contact' %}" class="btn emergency-btn">Emergency Contacts</a>
+        </div>
+</div>
+<br>
+<div class="scrolling-text">
+    <br>
+    <h3 class="text-center header-title" style="font-size: 24px; color: white">Public Alerts</h3>
+</div>
+<div class="row">
+    <div class="col">
+        <div class="table-responsive">
+            <table class="table table-dark table-striped">
+                <thead>
+                    <tr>
+                        <th>Report ID</th>
+                        <th>Report Date</th>
+                        <th style="width: 30%;">Report Title</th>
+                        <th>Category</th>
+                        <th style="width: 15%;">Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for alert in alerts %}
+                    <tr>
+                        <td>{{ alert.id }}</td>
+                        <td>{{ alert.submission_date|date:"m-d-Y H:i" }}</td>
+                        <td style="word-wrap: break-word;">{{ alert.submission_title|default:"N/A" }}</td>
+                        <td>{{ alert.submission_category }}</td>
+                        <td><a href="{% url 'nbhood_watch:alert_info'  submission_id=alert.id %}" class="btn small-orange-btn">View Details</a></td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center text-white">No public alerts exist!</td>
+                    </tr>
+                    
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="scrolling-text">
+    <br>
+    <h3 class="text-center header-title" style="font-size: 24px; color: white">Public Alerts Map</h3>
+</div>
+<div id="map" style="width: 100%; height: 400px;"></div>
+<script>
+function initMap() {
+    var mapOptions = {
+        center: new google.maps.LatLng(38.0356, -78.5034),
+        zoom: 15
+    };
+    var map = new google.maps.Map(document.getElementById('map'), mapOptions);
+
+    {% for submission in submissions %}
+    var marker = new google.maps.Marker({
+        position: new google.maps.LatLng({{ submission.latitude }}, {{ submission.longitude }}),
+        map,
+        label: {
+            text: "{{ submission.id }}",
+            color: "black",
+            fontSize: "12px",
+            fontWeight: "bold"
+        }
+    })
+    {% endfor %}
+}
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key={{ google_maps_api_key }}&loading=async&callback=initMap" async defer></script>
+{% endblock content %}

@@ -1,0 +1,99 @@
+{% extends 'nbhood_watch/base.html' %}
+
+{% load bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% load static %}
+
+{% block title %}Anonymous Reporting{% endblock %}
+
+{% block image %}
+<div class="main-image">
+    <img src="{% static 'nbhood_watch/images/lawnfall_enhanced.jpg' %}" alt="Main Image">
+
+    <div class="overlay" style="position: absolute; top: 30%; left: 50%; transform: translate(-50%, -50%); text-align: center; text-shadow: 1px 1px 0 #fff;">
+        <h3 class="text-center header-title" style="font-size: 48px; color: orangered; background-color: rgba(200, 200, 200, 0.45); padding: 10px; border-radius: 15px;">Welcome, Anonymous User!</h3>
+    </div>
+</div>
+{% endblock image %}
+
+{% block content %}
+<div class="overlay">
+    <div class="row">
+        <div class="col-sm-12 text-center mb-3">
+            <div class="d-flex justify-content-center gap-2">
+                <a href="{% url 'nbhood_watch:anonymous_info' %}" class="btn small-orange-btn wide-btn">Back to User Home</a>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12 mb-3">
+            <form action="{% url 'nbhood_watch:anonymous_report' %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {% bootstrap_form form field_classes="form-label" %}
+                <div class="mb-3">
+                    <label for="submission_location" class="form-label">Submission Location</label>
+                </div>
+                <div id="map" style="width: 100%; height: 400px;"></div>
+                <p class="form-text">Please provide the location relevant to your reported issue by clicking on the map to drop a pin. This is optional.</p>
+                <div class="d-flex justify-content-center submit-button-container">
+                    <input class="btn small-orange-btn" type="submit" value="Submit Report">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+function initMap() {
+    var mapOptions = {
+        center: new google.maps.LatLng(38.0356, -78.5034),
+        zoom: 15
+    };
+    var map = new google.maps.Map(document.getElementById('map'), mapOptions);
+    var currentMarker = null;
+    google.maps.event.addListener(map, 'click', function(event) {
+        document.getElementsByName('latitude')[0].value = event.latLng.lat();
+        document.getElementsByName('longitude')[0].value = event.latLng.lng();
+        if (currentMarker) {
+            currentMarker.setMap(null);
+        }
+
+        // Create a new marker at the clicked location
+        currentMarker = new google.maps.Marker({
+            position: event.latLng,
+            map: map
+        });
+    });
+
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            var currentLocation = {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude
+            };
+
+            // Center the map to the user's current location
+            map.setCenter(currentLocation);
+
+            // Optionally, you can add a marker at the user's current location
+            var userMarker = new google.maps.Marker({
+                position: currentLocation,
+                map: map,
+                label: {
+                    text: 'Your Location',
+                    color: "black",
+                    fontSize: "12px",
+                    fontWeight: "bold"
+                }
+            });
+        }, function() {
+            console.log('Geolocation is supported, but failed to get the location.');
+        });
+    } else {
+        console.log('Geolocation is not supported by this browser.');
+    }
+
+}
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key={{ google_maps_api_key }}&loading=async&callback=initMap" async defer></script>
+{% endblock %}

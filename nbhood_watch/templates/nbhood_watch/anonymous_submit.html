@@ -1,0 +1,29 @@
+{% extends 'nbhood_watch/base.html' %}
+{% block title %}Report Submitted{% endblock %}
+
+{% load static %}
+{% block image %}
+<div class="main-image">
+    <img src="{% static 'nbhood_watch/images/lawnfall_enhanced.jpg' %}" alt="Main Image">
+    <div class="overlay" style="position: absolute; top: 30%; left: 50%; transform: translate(-50%, -50%); text-align: center; text-shadow: 1px 1px 0 #fff;">
+        <h3 class="text-center header-title" style="font-size: 48px; color: orangered;background-color: rgba(200, 200, 200, 0.45); padding: 10px; border-radius: 15px;">Report Submission Confirmation</h3>
+    </div>
+</div>
+{% endblock image %}
+
+{% block content %}
+<div class="overlay">
+    <div class="row">
+        <div class="col-sm-12 text-center mb-3">
+            <div class="d-flex justify-content-center">
+                <a href="{% url 'nbhood_watch:anonymous_info' %}" class="btn small-orange-btn wide-btn">Back to User Home</a>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12 mb-3">
+          <h4 class="text-center header-title" style="color: white;">Your report has been submitted!</h4>
+        </div>
+    </div>
+</div>
+{% endblock %}

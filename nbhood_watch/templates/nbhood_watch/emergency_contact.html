@@ -1,0 +1,43 @@
+{% extends 'nbhood_watch/base.html' %}
+{% load static %}
+{% load bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+{% block title %}Emergency Contact Information{% endblock %}
+
+{% block image %}
+<div class="main-image">
+    <img src="{% static 'nbhood_watch/images/lawnfall_enhanced.jpg' %}" alt="Main Image">
+    <div class="overlay" style="position: absolute; top: 30%; left: 50%; transform: translate(-50%, -50%); text-align: center; text-shadow: 1px 1px 0 #fff;">
+        <h3 class="text-center header-title" style="font-size: 48px; color: orangered; background-color: rgba(200, 200, 200, 0.45); padding: 10px; border-radius: 15px;">Emergency Contacts</h3>
+    </div>
+</div>
+{% endblock image %}
+
+{% block content %}
+<div class="overlay">
+    <div class="row mt-4">
+        <div class="col-sm-12 text-center">
+            <div class="d-flex justify-content-center">
+                <a href="{% url 'nbhood_watch:login' %}" class="btn small-orange-btn" style="margin-bottom: 10px;">Back to Login</a>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="resource-list" style="margin-top: 10px;">
+                <ul>
+                    <li><strong>Police, Fire, Ambulance (Emergency): </strong>911</li>
+                    <li><strong>University Police (Non-Emergency): </strong>(434) 924-7166</li>
+                    <li><strong>Ambassadors: </strong> (434) 984-7622, extension 406</li>
+                    <li><strong>Facilities Management Reporting: </strong> (434) 924-1777</li>
+                    <li><strong>Hazing Hotline: </strong> (434) 243-4293</li>
+                    <li><strong>Student Health: </strong> (434) 297-4261</li>
+                    <li><strong>Counseling & Psychological Services: </strong> 434-243-5150</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

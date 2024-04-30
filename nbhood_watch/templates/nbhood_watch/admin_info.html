@@ -1,0 +1,41 @@
+{% extends 'nbhood_watch/base.html' %}
+{% load static %}
+
+{% block title %}Admin Information{% endblock %}
+
+{% block image %}
+<div class="main-image">
+    <img src="{% static 'nbhood_watch/images/lawnfall_enhanced.jpg' %}" alt="Main Image">
+
+    <div class="overlay" style="position: absolute; top: 30%; left: 50%; transform: translate(-50%, -50%); text-align: center; text-shadow: 1px 1px 0 #fff;">
+        <h3 class="text-center header-title" style="font-size: 48px; color: orangered; background-color: rgba(200, 200, 200, 0.45); padding: 10px; border-radius: 15px;">Welcome, Admin User!</h3>
+    </div>
+</div>
+{% endblock image %}
+
+{% block content %}
+<div class="overlay">
+    <div class="row">
+        <div class="col-sm-12 text-center">
+            <div class="d-flex justify-content-center gap-2 mb-4">
+                <a href="{% url 'nbhood_watch:login' %}" class="btn small-orange-btn">Back to Login</a>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12 d-flex justify-content-center">
+            <div class="text-left" style="max-width: 1000px; margin-bottom: 20px;">
+                <h5 class="header-title" style="color: white; font-size: 24px;">Your Name: {{ user.first_name }} {{ user.last_name }}</h5>
+                <h5 class="header-title" style="color: white; font-size: 24px;">Your Email Address: {{ user.email }}</h5>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12 text-center">
+            <div class="d-flex justify-content-center gap-2">
+                <a href="{% url 'nbhood_watch:view_reports' %}" class="btn small-orange-btn">View Reports</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
