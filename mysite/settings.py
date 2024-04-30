@@ -94,6 +94,10 @@ LOGIN_REDIRECT_URL = 'home'
 LOGOUT_URL = 'logout'
 LOGOUT_REDIRECT_URL = 'logout'
 
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '602188082415-8tv8fmsln24a7cl95epdgmh2dud6bo13.apps.googleusercontent.com'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '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'
+
+
 WSGI_APPLICATION = 'mysite.wsgi.application'
 
 # Database
@@ -176,6 +180,8 @@ if DEBUG:
     ]
 else:
     # Amazon S3 Settings
+    AWS_ACCESS_KEY_ID = 'AKIAVRUVPZE7QHCIYBXM'
+    AWS_SECRET_ACCESS_KEY = '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'
     AWS_STORAGE_BUCKET_NAME = 'nbhoodwatch'
     AWS_S3_REGION_NAME = 'us-east-1'
     AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
