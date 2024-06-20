@@ -94,8 +94,8 @@ LOGIN_REDIRECT_URL = 'home'
 LOGOUT_URL = 'logout'
 LOGOUT_REDIRECT_URL = 'logout'
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '602188082415-8tv8fmsln24a7cl95epdgmh2dud6bo13.apps.googleusercontent.com'
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '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'
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = ''
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = ''
 
 
 WSGI_APPLICATION = 'mysite.wsgi.application'
@@ -180,8 +180,8 @@ if DEBUG:
     ]
 else:
     # Amazon S3 Settings
-    AWS_ACCESS_KEY_ID = 'AKIAVRUVPZE7QHCIYBXM'
-    AWS_SECRET_ACCESS_KEY = '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'
+    AWS_ACCESS_KEY_ID = ''
+    AWS_SECRET_ACCESS_KEY = ''
     AWS_STORAGE_BUCKET_NAME = 'nbhoodwatch'
     AWS_S3_REGION_NAME = 'us-east-1'
     AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
@@ -199,4 +199,4 @@ else:
     MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Google Maps
-GOOGLE_MAPS_API_KEY = 'AIzaSyB5OvCMaGXYjMG_xQ68lwzzTPvDou5qfQQ'
+GOOGLE_MAPS_API_KEY = ''
